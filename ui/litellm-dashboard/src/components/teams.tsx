@@ -96,19 +96,24 @@ const Team: React.FC<TeamProps> = ({
 }) => {
   const [lastRefreshed, setLastRefreshed] = useState("");
 
-
   useEffect(() => {
-    console.log(`inside useeffect - ${teams}`)
-    if (teams === null && accessToken) {
-      // Call your function here
-      fetchTeams(accessToken, userID, userRole, currentOrg, setTeams)
-    }
-  }, [teams]);
+    const loadTeams = async () => {
+      if (accessToken) {
+        try {
+          await fetchTeams(accessToken, userID, userRole, currentOrg, setTeams);
+        } catch (error) {
+          console.error("Error fetching teams:", error);
+        }
+      }
+    };
+
+    loadTeams();
+  }, [accessToken, userID, userRole, currentOrg, setTeams]);
   
+
   useEffect(() => {
     console.log(`inside useeffect - ${lastRefreshed}`)
     if (accessToken) {
-      // Call your function here
       fetchTeams(accessToken, userID, userRole, currentOrg, setTeams)
     }
     handleRefreshClick()
@@ -161,7 +166,7 @@ const Team: React.FC<TeamProps> = ({
     fetchGuardrails();
   }, [accessToken]);
 
-
+  
   const handleOk = () => {
     setIsTeamModalVisible(false);
     form.resetFields();

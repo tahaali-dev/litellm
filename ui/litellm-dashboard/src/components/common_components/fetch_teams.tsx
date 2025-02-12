@@ -11,4 +11,6 @@ export const fetchTeams = async (accessToken: string, userID: string | null, use
     console.log(`givenTeams: ${givenTeams}`)
 
     setTeams(givenTeams)
+
+    return givenTeams
   }

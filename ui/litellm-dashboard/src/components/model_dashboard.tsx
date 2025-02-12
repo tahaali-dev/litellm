@@ -1455,6 +1455,8 @@ const ModelDashboard: React.FC<ModelDashboardProps> = ({
                                   modelID={model.model_info.id}
                                   accessToken={accessToken}
                                   callback={handleRefreshClick}
+                                  setModelData={setModelData}
+                                  modelData={modelData}
                                 />
                               </Col>
                             </Grid>
@@ -1485,7 +1487,7 @@ const ModelDashboard: React.FC<ModelDashboardProps> = ({
             </Modal>
           </TabPanel>
           <TabPanel className="h-full">
-            <Title2 level={2}>Add new model</Title2>
+            <Title2 level={2} className="mt-4 mb-2">Add new model</Title2>
             <Card>
               <Form
                 form={form}
@@ -1569,7 +1571,7 @@ const ModelDashboard: React.FC<ModelDashboardProps> = ({
                         Need Help?
                       </Typography.Link>
                     </Tooltip>
-                    <Button2 htmlType="submit">Add Model</Button2>
+                    <Button>Add Model</Button>
                   </div>
                 </>
               </Form>
