@@ -93,7 +93,7 @@ function KeyViewer({ row }: { row: Row<KeyResponse> }) {
   );
 }
 
-const TeamFilter = ({ 
+export const TeamFilter = ({ 
   teams, 
   selectedTeam, 
   setSelectedTeam 
@@ -108,13 +108,12 @@ const TeamFilter = ({
     };
   
     return (
-      <div className="mb-4">
+      <div>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-600">Where Team is</span>
           <Select
             value={selectedTeam?.team_id || ""}
             onValueChange={handleTeamChange}
-            placeholder="Team ID"
+            placeholder="Where Team ID"
             className="w-[400px]"
           >
             <SelectItem value="team_id">Team ID</SelectItem>
@@ -190,7 +189,11 @@ export function AllKeysTable({
     {
       header: "Team ID",
       accessorKey: "team_id",
-      cell: (info) => info.getValue() ? info.renderValue() : "Not Set",
+      cell: (info) => (  <div className="overflow-hidden">
+          <Tooltip title={info.getValue() as string}>
+              {info.getValue() ? `${(info.renderValue() as string).slice(0, 7)}...` : "Not Set"}
+          </Tooltip>
+        </div>) ,
     },
     {
       header: "Key Alias",
@@ -245,16 +248,18 @@ export function AllKeysTable({
       cell: (info) => {
         const models = info.getValue() as string[];
         return (
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap gap-1 pointer">
             {models && models.length > 0 ? (
-              models.map((model, index) => (
-                <span
-                  key={index}
-                  className="px-2 py-1 bg-blue-100 rounded text-xs"
-                >
-                  {model}
+              <Tooltip title={models.join(", ")}>
+                <span className="px-2 py-1 bg-blue-100 rounded text-xs">
+                  {models[0]}
                 </span>
-              ))
+                {models.length > 1 && (
+                  <span className="p-1 text-grey text-xs">
+                    +{models.length - 1}
+                  </span>
+                )}
+              </Tooltip>
             ) : (
               "-"
             )}
@@ -289,14 +294,17 @@ export function AllKeysTable({
           teams={teams}
         />
       ) : (
-        <div className="border-b py-4">
-          <div className="flex items-center justify-between w-full">
-            <TeamFilter 
-              teams={teams} 
-              selectedTeam={selectedTeam} 
-              setSelectedTeam={setSelectedTeam} 
-            />
-            <div className="flex items-center gap-4">
+        <div className="">
+
+            <DataTable
+            columns={columns.filter(col => col.id !== 'expander')}
+            data={keys}
+            isLoading={isLoading}
+            getRowCanExpand={() => false}
+            renderSubComponent={() => <></>}
+          />
+
+            <div className="flex items-center gap-4 justify-between mt-4">
               <span className="inline-flex text-sm text-gray-700">
                 Showing {isLoading ? "..." : `${(pagination.currentPage - 1) * pageSize + 1} - ${Math.min(pagination.currentPage * pageSize, pagination.totalCount)}`} of {isLoading ? "..." : pagination.totalCount} results
               </span>
@@ -323,14 +331,7 @@ export function AllKeysTable({
                 </button>
               </div>
             </div>
-          </div>
-          <DataTable
-            columns={columns.filter(col => col.id !== 'expander')}
-            data={keys}
-            isLoading={isLoading}
-            getRowCanExpand={() => false}
-            renderSubComponent={() => <></>}
-          />
+        
         </div>
         
       )}

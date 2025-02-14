@@ -22,6 +22,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Team } from "./key_team_helpers/key_list";
 import { jwtDecode } from "jwt-decode";
 import { Typography } from "antd";
+import { TeamFilter } from "./all_keys_table";
 const isLocal = process.env.NODE_ENV === "development";
 if (isLocal != true) {
   console.log = function() {};
@@ -335,10 +336,21 @@ const UserDashboard: React.FC<UserDashboardProps> = ({
 
   console.log("inside user dashboard, selected team", selectedTeam);
   return (
-    <div className="w-full mx-4">
-      <Grid numItems={1} className="gap-2 p-8 h-[75vh] w-full mt-2">
+    <div className="w-full mx-4 p-8 ">
+    
+      
+      <Grid numItems={1} className="">
         <Col numColSpan={1} className="flex flex-col gap-2">
-        <CreateKey
+      <div className="flex justify-between items-center">
+        <h1 className="text-xl font-bold text-gray-800">Virtual Keys</h1>
+
+        <div className="flex items-center gap-2">
+            <TeamFilter 
+              teams={teams} 
+              selectedTeam={selectedTeam} 
+              setSelectedTeam={setSelectedTeam} 
+            />
+              <CreateKey
             key={selectedTeam ? selectedTeam.team_id : null}
             userID={userID}
             team={selectedTeam as Team | null}
@@ -348,8 +360,11 @@ const UserDashboard: React.FC<UserDashboardProps> = ({
             data={keys}
             setData={setKeys}
           />
+        </div>
+      
+      </div>
 
-          <ViewKeyTable
+        <ViewKeyTable
             userID={userID}
             userRole={userRole}
             accessToken={accessToken}
@@ -361,6 +376,7 @@ const UserDashboard: React.FC<UserDashboardProps> = ({
             teams={teams}
             currentOrg={currentOrg}
           />
+        
         </Col>
       </Grid>
     </div>

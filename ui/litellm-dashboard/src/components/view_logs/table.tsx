@@ -32,6 +32,7 @@ export function DataTable<TData, TValue>({
   renderSubComponent,
   isLoading = false,
 }: DataTableProps<TData, TValue>) {
+  
   const table = useReactTable({
     data,
     columns,
@@ -41,14 +42,14 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="rounded-lg custom-border">
-      <Table className="[&_td]:py-0.5 [&_th]:py-1">
-        <TableHead>
+    <div className="rounded-lg custom-border mt-4">
+      <Table className="[&_td]:py-0.5 [&_th]:py-1 max-h-[75vh] min-h-[75vh]">
+        <TableHead className="sticky top-0 bg-white z-0">
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
+            <TableRow key={headerGroup.id} className="border-b ">
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHeaderCell key={header.id} className="py-1 h-8">
+                  <TableHeaderCell key={header.id} className=" h-12">
                     {header.isPlaceholder ? null : (
                       flexRender(
                         header.column.columnDef.header,
@@ -66,7 +67,7 @@ export function DataTable<TData, TValue>({
             <TableRow>
               <TableCell colSpan={columns.length} className="h-8 text-center">
                 <div className="text-center text-gray-500">
-                  <p>🚅 Loading logs...</p>
+                  <p>🚅 Loading Keys...</p>
                 </div>
               </TableCell>
             </TableRow>
