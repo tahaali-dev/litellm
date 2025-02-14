@@ -252,7 +252,7 @@ const Team: React.FC<TeamProps> = ({
         } else {
           teamList = await teamListCall(accessToken, currentOrg?.organization_id || DEFAULT_ORGANIZATION)
         }
-        
+
         for (let i = 0; i < teamList.length; i++) {
           let team = teamList[i];
           let _team_id = team.team_id;
@@ -278,7 +278,7 @@ const Team: React.FC<TeamProps> = ({
       if (accessToken != null) {
         const newTeamAlias = formValues?.team_alias;
         const existingTeamAliases = teams?.map((t) => t.team_alias) ?? [];
-        let organizationId = formValues?.organization_id || currentOrg?.organization_id;
+          let organizationId = formValues?.organization_id || currentOrg?.organization_id;
         if (organizationId === "" || typeof organizationId !== 'string') {
           formValues.organization_id = null;
         } else {
@@ -378,7 +378,7 @@ const Team: React.FC<TeamProps> = ({
       </Text>
       <Grid numItems={1} className="gap-2 pt-2 pb-2 h-[75vh] w-full mt-2">
         <Col numColSpan={1}>
-          <Card className="w-full mx-auto flex-auto overflow-y-auto max-h-[50vh]">
+        <Card className="w-full mx-auto flex-auto overflow-y-auto max-h-[50vh]">
             <Table>
               <TableHead>
                 <TableRow>
@@ -394,7 +394,7 @@ const Team: React.FC<TeamProps> = ({
               </TableHead>
 
               <TableBody>
-                {teams && teams.length > 0
+              {teams && teams.length > 0
                   ? teams
                       .filter((team) => {
                         const targetOrgId = currentOrg ? currentOrg.organization_id : null;
@@ -431,7 +431,7 @@ const Team: React.FC<TeamProps> = ({
                             </Tooltip>
                           </div>
                         </TableCell>
-                      </TableRow>
+                        </TableRow>
 
                         <TableCell
                           style={{
@@ -650,6 +650,7 @@ const Team: React.FC<TeamProps> = ({
                 </Form.Item>
                 <Form.Item label="Models" name="models">
                   <Select2
+                    id="create-team-models"
                     mode="multiple"
                     placeholder="Select models"
                     style={{ width: "100%" }}
@@ -657,11 +658,12 @@ const Team: React.FC<TeamProps> = ({
                     <Select2.Option
                       key="all-proxy-models"
                       value="all-proxy-models"
+                      id="create-team-models-all-proxy-models-option"
                     >
                       All Proxy Models
                     </Select2.Option>
                     {userModels.map((model) => (
-                      <Select2.Option key={model} value={model}>
+                      <Select2.Option key={model} id={`create-team-models-${model}-option`} value={model}>
                         {getModelDisplayName(model)}
                       </Select2.Option>
                     ))}

@@ -292,6 +292,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
           
           <Form.Item label="Models" name="models">
             <Select2
+              id="edit-team-models"
               mode="multiple"
               placeholder="Select models"
               style={{ width: "100%" }}
@@ -299,11 +300,12 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
               <Select2.Option
                 key="all-proxy-models"
                 value="all-proxy-models"
+                id="edit-team-models-all-proxy-models-option"
               >
                 All Proxy Models
               </Select2.Option>
               {userModels.map((model) => (
-                <Select2.Option key={model} value={model}>
+                <Select2.Option key={model} value={model} id={`edit-team-models-${model}-option`}>
                   {getModelDisplayName(model)}
                 </Select2.Option>
               ))}
@@ -532,12 +534,14 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     <Select
                       mode="multiple"
                       placeholder="Select models"
+              id="edit-team-models"
+                       
                     >
-                      <Select.Option key="all-proxy-models" value="all-proxy-models">
+                      <Select.Option key="all-proxy-models" value="all-proxy-models" id="edit-team-models-all-proxy-models-option">
                         All Proxy Models
                       </Select.Option>
                       {userModels.map((model) => (
-                        <Select.Option key={model} value={model}>
+                        <Select.Option key={model} value={model} id={`edit-team-models-${model}-option`}>
                           {getModelDisplayName(model)}
                         </Select.Option>
                       ))}
@@ -588,7 +592,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                       placeholder="Select or enter guardrails"
                     />
                   </Form.Item>
-
+                
                   <div className="flex justify-end gap-2 mt-6">
                     <Button onClick={() => setIsEditing(false)}>
                       Cancel
@@ -629,7 +633,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                   </div>
                   <div>
                     <Text className="font-medium">Budget</Text>
-                      <div>Max: {info.max_budget !== null ? `$${info.max_budget}` : 'No Limit'}</div>
+                    <div>Max: {info.max_budget !== null ? `$${info.max_budget}` : 'No Limit'}</div>
                     <div>Reset: {info.budget_duration || 'Never'}</div>
                   </div>
                   <div>
@@ -641,7 +645,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                 </div>
               )}
             </Card>
-
+            
             <ModelAliasesCard
               teamId={teamId}
               accessToken={accessToken}

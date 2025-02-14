@@ -178,11 +178,11 @@ const Createuser: React.FC<CreateuserProps> = ({
             <TextInput placeholder="" />
           </Form.Item>
           <Form.Item label="User Role" name="user_role">
-            <Select2>
+            <Select2 id="user_role">
               {possibleUIRoles &&
                 Object.entries(possibleUIRoles).map(
                   ([role, { ui_label, description }]) => (
-                    <SelectItem key={role} value={role} title={ui_label}>
+                    <SelectItem key={role} value={role} title={ui_label} id={`user_role_${role}_option`}>
                       <div className="flex">
                         {ui_label}{" "}
                         <p
@@ -198,10 +198,10 @@ const Createuser: React.FC<CreateuserProps> = ({
             </Select2>
           </Form.Item>
           <Form.Item label="Team ID" name="team_id">
-            <Select placeholder="Select Team ID" style={{ width: "100%" }}>
+            <Select placeholder="Select Team ID" style={{ width: "100%" }} id="user_team_id">
               {teams ? (
                 teams.map((team: any) => (
-                  <Option key={team.team_id} value={team.team_id}>
+                  <Option key={team.team_id} value={team.team_id} id={`user_team_id_${team.team_alias}_option`}>
                     {team.team_alias}
                   </Option>
                 ))
