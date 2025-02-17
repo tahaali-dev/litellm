@@ -94,8 +94,10 @@ const UserDashboard: React.FC<UserDashboardProps> = ({
   const searchParams = useSearchParams()!;
 
   const token = getCookie('token');
+
   const invitation_id = searchParams.get("invitation_id");
 
+  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [teamSpend, setTeamSpend] = useState<number | null>(null);
   const [userModels, setUserModels] = useState<string[]>([]);
   const [proxySettings, setProxySettings] = useState<ProxySettings | null>(null);
@@ -113,8 +115,62 @@ const UserDashboard: React.FC<UserDashboardProps> = ({
     });
   }
 
+  function formatUserRole(userRole: string) {
+    if (!userRole) {
+      return "Undefined Role";
+    }
+    console.log(`Received user role: ${userRole}`);
+    switch (userRole.toLowerCase()) {
+      case "app_owner":
+        return "App Owner";
+      case "demo_app_owner":
+        return "App Owner";
+      case "app_admin":
+        return "Admin";
+      case "proxy_admin":
+        return "Admin";
+      case "proxy_admin_viewer":
+        return "Admin Viewer";
+      case "app_user":
+        return "App User";
+      case "internal_user":
+        return "Internal User";
+      case "internal_user_viewer":
+        return "Internal Viewer";
+      default:
+        return "Unknown Role";
+    }
+  }
+
+  // console.log(`selectedTeam: ${Object.entries(selectedTeam)}`);
   // Moved useEffect inside the component and used a condition to run fetch only if the params are available
   useEffect(() => {
+    if (token) {
+      const decoded = jwtDecode(token) as { [key: string]: any };
+      if (decoded) {
+        // cast decoded to dictionary
+        console.log("Decoded token:", decoded);
+
+        console.log("Decoded key:", decoded.key);
+        // set accessToken
+        setAccessToken(decoded.key);
+
+        // check if userRole is defined
+        if (decoded.user_role) {
+          const formattedUserRole = formatUserRole(decoded.user_role);
+          console.log("Decoded user_role:", formattedUserRole);
+          setUserRole(formattedUserRole);
+        } else {
+          console.log("User role not defined");
+        }
+
+        if (decoded.user_email) {
+          setUserEmail(decoded.user_email);
+        } else {
+          console.log(`User Email is not set ${decoded}`);
+        }
+      }
+    }
     if (userID && accessToken && userRole && !keys && !userSpendData) {
       const cachedUserModels = sessionStorage.getItem("userModels" + userID);
       if (cachedUserModels) {
@@ -230,15 +286,6 @@ const UserDashboard: React.FC<UserDashboardProps> = ({
     }
   }, [selectedTeam]);
 
-  useEffect(() => {
-    setSelectedTeam(teams && teams.length > 0 ? teams[0] : defaultTeam);
-  }, [teams]);
-
-
-    useEffect(() => {
-  console.log("selected-team-dash",selectedTeam);
-  
-  }, [selectedTeam]);
 
   if (invitation_id != null) {
     return (
